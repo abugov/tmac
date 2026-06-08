@@ -32,6 +32,7 @@ mkdir -p "$APP_DIR/Contents/Resources"
 
 cp "$SWIFT_BIN" "$APP_DIR/Contents/MacOS/$APP_NAME"
 cp "$SCRIPT_DIR/Info.plist" "$APP_DIR/Contents/Info.plist"
+[ -f "$SCRIPT_DIR/Resources/AppIcon.icns" ] && cp "$SCRIPT_DIR/Resources/AppIcon.icns" "$APP_DIR/Contents/Resources/"
 
 echo ">>> Ad-hoc signing"
 codesign --force --deep --sign - "$APP_DIR" >/dev/null

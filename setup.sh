@@ -109,8 +109,12 @@ if [[ "$WRITE_CONFIGS" == "yes" ]]; then
     fi
 
     yellow ">>> Writing $TMAC_CONF"
-    sed -e "s|__TMAC_TMUX_CONF__|$TMUX_CONF|g" \
+    sed -e "s|__TMAC_TMUX_CONF__|$TMUX_CONF|g" \\
         "$TEMPLATE_DIR/config.json.template" > "$TMAC_CONF"
+
+    yellow ">>> Writing $CONFIG_DIR/zsh/.zshrc"
+    mkdir -p "$CONFIG_DIR/zsh"
+    cp "$TEMPLATE_DIR/zshrc.template" "$CONFIG_DIR/zsh/.zshrc"
 else
     green ">>> Keeping existing $TMUX_CONF and $TMAC_CONF"
 fi
@@ -122,5 +126,4 @@ yellow ">>> Building & publishing Tmac.app"
 echo
 green "Setup complete."
 echo
-echo "If Tmac is not available for selection in Shortcuts.app, run:"
-echo "  make restart-mac-pref-daemon"
+echo -e "If Tmac is not available for selection in Shortcuts.app, run: \033[38;5;93mmake restart-mac-pref-daemon\033[0m"

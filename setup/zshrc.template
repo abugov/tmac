@@ -1,0 +1,13 @@
+# Shim sourced when ZDOTDIR=~/.config/tmac/zsh is set by Tmac's tmux
+# default-command. Re-sources your real dotfiles (which zsh would have
+# loaded itself if ZDOTDIR weren't redirected), then pins HISTFILE per
+# tmux pane so ↑ and ⌃R are pane-local.
+[ -f "$HOME/.zshenv" ]   && source "$HOME/.zshenv"
+[ -f "$HOME/.zprofile" ] && source "$HOME/.zprofile"
+[ -f "$HOME/.zshrc" ]    && source "$HOME/.zshrc"
+
+if [ -n "$TMUX_PANE" ]; then
+    mkdir -p "$HOME/.config/tmac/state/zsh_history"
+    export HISTFILE="$HOME/.config/tmac/state/zsh_history/${TMUX_PANE#%}"
+    fc -R "$HISTFILE" 2>/dev/null
+fi

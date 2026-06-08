@@ -3,7 +3,12 @@
 # Auto-save snapshots every N minutes.
 set -g @resurrect-dir '__TMAC_STATE_DIR__'
 set -g @continuum-save-interval '5'
-set -g @resurrect-save-shell-history 'on'
+
+# Per-pane shell history. tmux's default-command runs once per new pane
+# before the shell starts; we set HISTFILE from $TMUX_PANE so ↑ / ⌃R show
+# only commands typed in that pane. Local to Tmac — your other shells'
+# global ~/.zsh_history is untouched.
+set -g default-command 'ZDOTDIR="$HOME/.config/tmac/zsh" exec ${SHELL:-/bin/zsh} -l'
 
 # Resurrect doesn't auto-prune. After every save, delete all but the newest
 # .txt; the 'last' symlink keeps pointing at the survivor. To keep a small

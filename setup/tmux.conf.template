@@ -24,6 +24,10 @@ set -g @continuum-restore 'off'
 run-shell '__TMAC_PLUGINS_DIR__/tmux-resurrect/resurrect.tmux'
 run-shell '__TMAC_PLUGINS_DIR__/tmux-continuum/continuum.tmux'
 
+# Continuum's auto-save interpolation is skipped when other tmux servers
+# exist (same gating as restore). Inject it manually.
+set -ga status-right '#(__TMAC_PLUGINS_DIR__/tmux-continuum/scripts/continuum_save.sh)'
+
 # Restore previous state on server start if a snapshot exists.
 if-shell '[ -f __TMAC_STATE_DIR__/last ]' \
     "run-shell '__TMAC_PLUGINS_DIR__/tmux-resurrect/scripts/restore.sh'"

@@ -3,6 +3,7 @@
 # Auto-save snapshots every N minutes.
 set -g @resurrect-dir '__TMAC_STATE_DIR__'
 set -g @continuum-save-interval '5'
+set -g @resurrect-save-shell-history 'on'
 
 # Resurrect doesn't auto-prune. After every save, delete all but the newest
 # .txt; the 'last' symlink keeps pointing at the survivor. To keep a small

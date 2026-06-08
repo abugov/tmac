@@ -1,0 +1,8 @@
+{
+  "command": "tmux",
+  "args": [
+    "-L", "tmac",
+    "-f", "__TMAC_TMUX_CONF__",
+    "new-session", "-A", "-s", "tmac"
+  ]
+}

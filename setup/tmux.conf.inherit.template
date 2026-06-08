@@ -1,0 +1,7 @@
+# Inherit your system tmux setup (prefix, keybindings, plugins, options).
+# Comment this line out for a fully isolated Tmac tmux.
+source-file '__USER_TMUX_CONF__'
+
+# Reload reads THIS layered file, not just the inherited one.
+bind r source-file '__TMAC_TMUX_CONF__' \; display-message "Tmac tmux.conf reloaded"
+

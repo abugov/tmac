@@ -1,0 +1,6 @@
+# SwiftPM build artifacts
+.build/
+.swiftpm/
+
+# .app bundle output
+bin/

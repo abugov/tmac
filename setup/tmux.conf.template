@@ -1,0 +1,23 @@
+# --- Tmac-specific (these win because they're sourced last) ---
+
+# Auto-save snapshots every N minutes.
+set -g @resurrect-dir '__TMAC_STATE_DIR__'
+set -g @continuum-save-interval '5'
+
+# Resurrect doesn't auto-prune. After every save, delete all but the newest
+# .txt; the 'last' symlink keeps pointing at the survivor. To keep a small
+# history buffer instead, change 'tail -n +2' to e.g. 'tail -n +6'.
+set -g @resurrect-hook-post-save-all 'ls -1t __TMAC_STATE_DIR__/tmux_resurrect_*.txt 2>/dev/null | tail -n +2 | xargs rm -f'
+
+# Continuum's auto-restore bails when other tmux servers are running on the
+# machine (e.g. your normal tmux in iTerm), even though we're isolated via
+# -L tmac. Disable it; trigger resurrect's restore directly during config
+# load instead, so 'new-session -A -s tmac' attaches to the restored session.
+set -g @continuum-restore 'off'
+
+run-shell '__TMAC_PLUGINS_DIR__/tmux-resurrect/resurrect.tmux'
+run-shell '__TMAC_PLUGINS_DIR__/tmux-continuum/continuum.tmux'
+
+# Restore previous state on server start if a snapshot exists.
+if-shell '[ -f __TMAC_STATE_DIR__/last ]' \
+    "run-shell '__TMAC_PLUGINS_DIR__/tmux-resurrect/scripts/restore.sh'"

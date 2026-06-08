@@ -34,4 +34,14 @@ app-clean:
 # Tmac missing from Shortcuts' Open App picker.
 .PHONY: restart-mac-pref-daemon
 restart-mac-pref-daemon:
-	killall cfprefsd; killall Shortcuts 2>/dev/null; open -a Shortcuts
+	@printf "Run 'killall cfprefsd; killall Shortcuts 2>/dev/null; open -a Shortcuts'? [Y/n] "; \
+		read ans; \
+		case "$$ans" in \
+			""|y|Y|yes|YES) killall cfprefsd; killall Shortcuts 2>/dev/null; open -a Shortcuts ;; \
+			*) echo "Aborted." ;; \
+		esac
+
+# Kill tmux server
+.PHONY: kill-tmux
+kill-tmux:
+	tmux -L tmac kill-server

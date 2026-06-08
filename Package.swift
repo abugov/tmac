@@ -5,7 +5,7 @@ let package = Package(
     name: "Tmac",
     platforms: [.macOS(.v13)],
     dependencies: [
-        .package(url: "https://github.com/migueldeicaza/SwiftTerm.git", from: "1.2.0"),
+        .package(path: "../SwiftTerm"),
     ],
     targets: [
         .executableTarget(

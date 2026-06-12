@@ -32,6 +32,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, LocalProcessTerminalVi
         terminal.autoresizingMask = [.width, .height]
         terminal.nativeForegroundColor = NSColor(white: 0.92, alpha: 1.0)
         terminal.nativeBackgroundColor = NSColor(white: 0.08, alpha: 1.0)
+        terminal.customBlockGlyphs = true
+        // SF Mono 12pt regular — slimmer than SwiftTerm's default Menlo at
+        // the system size (13pt). Validated visually via TmacHarness.
+        terminal.font = NSFont.monospacedSystemFont(
+            ofSize: 12,
+            weight: .regular
+        )
         window.contentView = terminal
         window.makeFirstResponder(terminal)
         window.makeKeyAndOrderFront(nil)
@@ -88,6 +95,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, LocalProcessTerminalVi
         for p in extraPath where !pathParts.contains(p) { pathParts.append(p) }
         env["PATH"] = pathParts.joined(separator: ":")
         env["TERM"] = "xterm-256color"
+        // Force a UTF-8 locale. When launched from Finder/launchd, GUI apps
+        // inherit a stripped env without LANG/LC_*, which makes tmux's
+        // client decide UTF-8 mode is off (client_utf8=0) and downgrade
+        // unicode glyphs (↑↓↵⠙▶) to ASCII placeholders like "_".
+        // Setting LANG here also benefits every other tool Tmac spawns
+        // (shell, vim, fzf, ripgrep …) that needs a UTF-8 ctype.
+        env["LANG"] = "en_US.UTF-8"
+        env["LC_ALL"] = "en_US.UTF-8"
         let envArr = env.map { "\($0.key)=\($0.value)" }
 
         FileManager.default.changeCurrentDirectoryPath(
